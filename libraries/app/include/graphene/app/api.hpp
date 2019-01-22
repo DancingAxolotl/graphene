@@ -27,6 +27,7 @@
 
 #include <graphene/chain/protocol/types.hpp>
 #include <graphene/chain/protocol/confidential.hpp>
+#include <graphene/chain/music_contract_object.hpp>
 
 #include <graphene/market_history/market_history_plugin.hpp>
 
@@ -253,6 +254,26 @@ namespace graphene { namespace app {
    };
 
    /**
+    * @brief the music_contract_api class exposes access to data related to contract operations.
+    */
+   class music_contract_api
+   {
+      public:
+         music_contract_api(graphene::chain::database& db);
+         ~music_contract_api();
+
+      /* explain */
+         optional<music_contract_object>  get_music_contract( account_id_type from, uint32_t music_contract_id )const;
+
+      private:
+         graphene::chain::database& _db;
+      };
+
+
+
+
+
+      /**
     * @brief The login_api class implements the bottom layer of the RPC API
     *
     * All other APIs must be requested from this API.
@@ -283,6 +304,8 @@ namespace graphene { namespace app {
          fc::api<network_node_api> network_node()const;
          /// @brief Retrieve the cryptography API
          fc::api<crypto_api> crypto()const;
+         /// @brief Retrieve the contract API
+         fc::api<music_contract_api> music_contract()const;
          /// @brief Retrieve the debug API (if available)
          fc::api<graphene::debug_witness::debug_api> debug()const;
 
@@ -296,6 +319,7 @@ namespace graphene { namespace app {
          optional< fc::api<network_node_api> > _network_node_api;
          optional< fc::api<history_api> >  _history_api;
          optional< fc::api<crypto_api> > _crypto_api;
+         optional< fc::api<music_contract_api> > _music_contract_api;
          optional< fc::api<graphene::debug_witness::debug_api> > _debug_api;
    };
 
@@ -341,6 +365,9 @@ FC_API(graphene::app::crypto_api,
        (verify_range_proof_rewind)
        (range_get_info)
      )
+FC_API(graphene::app::music_contract_api,
+       (get_music_contract)
+     )
 FC_API(graphene::app::login_api,
        (login)
        (network_broadcast)
@@ -348,5 +375,6 @@ FC_API(graphene::app::login_api,
        (history)
        (network_node)
        (crypto)
+       (music_contract)
        (debug)
      )

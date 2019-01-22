@@ -474,4 +474,15 @@ void database::update_withdraw_permissions()
       remove(*permit_index.begin());
 }
 
+void database::remove_expired_music_contracts( )
+{
+   const auto& music_contract_idx = get_index_type<music_contract_index>().indices().get<by_expiration>();
+   while( !music_contract_idx.empty() && music_contract_idx.begin() != music_contract_idx.end()
+          && music_contract_idx.begin()->music_contract_expiration <= head_block_time() && !music_contract_idx.begin()->disputed )
+   {
+      adjust_balance( music_contract_idx.begin()->from, music_contract_idx.begin()->amount );
+      remove(*music_contract_idx.begin());
+   }
+}
+
 } }

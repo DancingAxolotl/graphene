@@ -95,6 +95,10 @@ namespace graphene { namespace app {
        {
           _crypto_api = std::make_shared< crypto_api >();
        }
+       else if( api_name == "music_contract_api" )
+       {
+          _music_contract_api = std::make_shared< music_contract_api >( std::ref( *_app.chain_database() ) );
+       }
        else if( api_name == "debug_api" )
        {
           // can only enable this API if the plugin was loaded
@@ -215,6 +219,12 @@ namespace graphene { namespace app {
     {
        FC_ASSERT(_crypto_api);
        return *_crypto_api;
+    }
+	
+    fc::api<music_contract_api> login_api::music_contract() const
+    {
+       FC_ASSERT(_music_contract_api);
+       return *_music_contract_api;
     }
 
     fc::api<graphene::debug_witness::debug_api> login_api::debug() const
@@ -549,5 +559,22 @@ namespace graphene { namespace app {
     {
        return fc::ecc::range_get_info( proof );
     }
+
+    // music_contract api
+   music_contract_api::music_contract_api(graphene::chain::database& db) : _db(db) { }
+   music_contract_api::~music_contract_api() { }
+   optional<music_contract_object> music_contract_api::get_music_contract( account_id_type from, uint32_t music_contract_id )const
+   {
+      optional< music_contract_object > result;
+
+      try
+      {
+         result = _db.get_music_contract( from, music_contract_id );
+      }
+      catch ( ... ) {}
+
+      return result;
+
+   }
 
 } } // graphene::app

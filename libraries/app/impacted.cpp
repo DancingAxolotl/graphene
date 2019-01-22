@@ -203,6 +203,28 @@ struct get_impacted_account_visitor
       _impacted.insert( op.account_id );
    }
 
+   void operator()( const music_contract_transfer_operation& op ) {
+      _impacted.insert( op.producer );
+      _impacted.insert( op.musician );
+      _impacted.insert( op.agent );
+
+   }
+   void operator()( const music_contract_approve_operation& op ) {
+      _impacted.insert( op.producer );
+      _impacted.insert( op.musician );
+      _impacted.insert( op.agent );
+
+   }
+   void operator()( const music_contract_dispute_operation& op ) {
+      _impacted.insert( op.producer );
+      _impacted.insert( op.musician );
+      _impacted.insert( op.agent );
+   }
+   void operator()( const music_contract_release_operation& op ) {
+      _impacted.insert( op.producer );
+      _impacted.insert( op.musician );
+      _impacted.insert( op.agent );
+   }
 };
 
 void operation_get_impacted_accounts( const operation& op, flat_set<account_id_type>& result )

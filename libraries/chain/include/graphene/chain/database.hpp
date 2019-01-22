@@ -259,8 +259,9 @@ namespace graphene { namespace chain {
 
          node_property_object& node_properties();
 
-
          uint32_t last_non_undoable_block_num() const;
+
+         const music_contract_object&   get_music_contract( account_id_type account, uint32_t music_contract_id )const;
          //////////////////// db_init.cpp ////////////////////
 
          void initialize_evaluators();
@@ -435,6 +436,8 @@ namespace graphene { namespace chain {
          void update_maintenance_flag( bool new_maintenance_flag );
          void update_withdraw_permissions();
          bool check_for_blackswan( const asset_object& mia, bool enable_black_swan = true );
+
+         void remove_expired_music_contracts( );
 
          ///Steps performed only at maintenance intervals
          ///@{

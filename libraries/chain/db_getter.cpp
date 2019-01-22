@@ -97,5 +97,12 @@ uint32_t database::last_non_undoable_block_num() const
    return head_block_num() - _undo_db.size();
 }
 
+const music_contract_object& database::get_music_contract( account_id_type account, uint32_t music_contract_id )const
+{
+   const auto& music_contract_idx = get_index_type<music_contract_index>().indices().get<by_from_id>();
+   auto itr = music_contract_idx.find( boost::make_tuple(account,music_contract_id) );
+   FC_ASSERT( itr != music_contract_idx.end() );
+   return *itr;
+}
 
 } }
